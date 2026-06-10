@@ -40,6 +40,8 @@ ths-navigation-page/
 
 `wrangler.toml` 已配置 `[assets] directory = "./public"`，Workers 会把 `public/index.html` 作为静态资源发布。
 
+Workers 静态资源部署不需要 `_redirects` fallback；本项目只有根页面，访问 `/` 会直接返回 `public/index.html`。
+
 ## Wrangler 部署
 
 ```bash
