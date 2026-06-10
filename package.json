@@ -7,6 +7,6 @@
     "build": "node -e \"console.log('Static site: no build step required')\"",
     "preview": "npx --yes wrangler pages dev public",
     "pages:deploy": "npx --yes wrangler pages deploy public",
-    "deploy": "npx --yes wrangler pages deploy public"
+    "deploy": "node -e \"console.log('Cloudflare Pages Git deployments should leave Deploy command empty and publish the public directory.')\""
   }
 }

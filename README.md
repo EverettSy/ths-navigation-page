@@ -27,6 +27,8 @@ ths-navigation-page/
 
 不要在 Cloudflare Pages 中使用 `wrangler deploy`。这是 Workers 的部署命令，会要求 Worker 入口文件或 assets 配置，并触发 `Missing entry-point to Worker script or to assets directory` 错误。
 
+也不要在 Cloudflare Pages 的 Git 构建中使用 `wrangler pages deploy` 或 `npm run pages:deploy`。Git 集成部署会自动上传 `public` 目录；在构建容器里手动跑 Wrangler 需要额外的 `CLOUDFLARE_API_TOKEN` 权限，容易触发 `Authentication error [code: 10000]`。
+
 ## Wrangler 部署
 
 ```bash
