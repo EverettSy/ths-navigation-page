@@ -6,6 +6,7 @@
   "scripts": {
     "build": "node -e \"console.log('Static site: no build step required')\"",
     "preview": "npx --yes wrangler pages dev public",
+    "pages:deploy": "npx --yes wrangler pages deploy public",
     "deploy": "npx --yes wrangler pages deploy public"
   }
 }

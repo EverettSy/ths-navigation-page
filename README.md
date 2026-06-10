@@ -22,12 +22,15 @@ ths-navigation-page/
    - Framework preset: `None`
    - Build command: `npm run build`
    - Build output directory: `public`
+   - Deploy command: 留空
 4. 保存并部署。
+
+不要在 Cloudflare Pages 中使用 `wrangler deploy`。这是 Workers 的部署命令，会要求 Worker 入口文件或 assets 配置，并触发 `Missing entry-point to Worker script or to assets directory` 错误。
 
 ## Wrangler 部署
 
 ```bash
-npm run deploy
+npm run pages:deploy
 ```
 
 本地预览：
