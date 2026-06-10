@@ -56,4 +56,4 @@ npm run preview
 
 ## 注意事项
 
-页面内的外部 iframe 链接已尽量改为 `https://`，以减少浏览器混合内容拦截。若某个第三方站点不支持 HTTPS，该 iframe 仍可能无法在 HTTPS 页面中加载。
+页面内有多个外部 iframe 链接，其中部分是 `http://` 地址。Cloudflare Pages 会通过 HTTPS 访问，现代浏览器可能会拦截 HTTPS 页面中的 HTTP iframe；这属于浏览器混合内容限制，不是 Pages 构建错误。若目标站点支持 HTTPS，可以把对应链接改成 `https://`。
