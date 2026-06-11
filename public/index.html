@@ -59,7 +59,7 @@
             padding: 10px 72px 10px 16px;
             position: fixed;
             right: 0;
-            top: 85px;
+            top: 203px;
             z-index: 999;
             transition: transform 0.25s ease, opacity 0.25s ease;
         }
@@ -129,7 +129,7 @@
             line-height: 1;
             position: fixed;
             right: 18px;
-            top: 96px;
+            top: 214px;
             transition: transform 0.2s ease, background-color 0.2s ease;
             width: 42px;
             z-index: 1003;
@@ -147,7 +147,7 @@
         }
 
         body.nav-collapsed .main-content {
-            top: 85px;
+            top: 203px;
         }
 
         .nav-button {
@@ -233,31 +233,93 @@
         /* 市场概览样式 */
         #market-overview {
             padding: 0;
-            background: var(--bg-panel);
+            background:
+                linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(246, 248, 250, 0.98));
             border-bottom: 1px solid var(--border-color);
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1002;
-            height: 50px;
+            height: 168px;
         }
 
         #market-overview > div {
             width: 100%;
-            padding: 0 20px;
+            padding: 10px 20px 12px;
             height: 100%;
             display: flex;
             align-items: center;
+            overflow-x: auto;
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        #market-overview > div::-webkit-scrollbar {
+            display: none;
         }
 
         #data-container {
             display: flex;
             flex-wrap: nowrap;
-            gap: 10px;
+            gap: 22px;
             align-items: stretch;
             width: 100%;
             height: 100%;
+            min-width: max-content;
+        }
+
+        #data-container > div {
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0) 32%),
+                linear-gradient(135deg, #d9fbf4 0%, #e8fbf7 48%, #f8fffd 100%) !important;
+            border: 1px solid rgba(210, 246, 239, 0.9) !important;
+            border-radius: 10px !important;
+            box-shadow:
+                0 10px 22px rgba(20, 28, 40, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.78) !important;
+            display: flex !important;
+            flex: 1 0 225px !important;
+            flex-direction: column;
+            height: 145px !important;
+            justify-content: center;
+            min-width: 225px !important;
+            padding: 16px 18px !important;
+            text-align: center !important;
+        }
+
+        #data-container > div > div:first-child {
+            color: #00a51b !important;
+            font-size: 28px !important;
+            font-weight: 800 !important;
+            line-height: 1.1;
+            margin-bottom: 8px !important;
+            white-space: nowrap;
+        }
+
+        #data-container > div > div:nth-child(2) {
+            color: #00a51b !important;
+            font-size: 0 !important;
+            line-height: 1.16;
+        }
+
+        #data-container > div > div:nth-child(2) span {
+            color: inherit !important;
+            display: flex;
+            flex-direction: column;
+            font-weight: 700;
+            gap: 2px;
+            line-height: 1.12;
+        }
+
+        .index-price {
+            font-size: 30px;
+            letter-spacing: 0;
+        }
+
+        .index-change {
+            font-size: 24px;
+            letter-spacing: 0;
         }
 
         /* 快讯样式 */
@@ -268,7 +330,7 @@
             border-bottom: 1px solid var(--border-color);
             height: 35px;
             position: fixed;
-            top: 50px;
+            top: 168px;
             z-index: 1001;
             display: flex;
             align-items: center;
@@ -366,7 +428,7 @@
             background-color: white;
             animation: fadeIn 0.5s ease-out;
             position: fixed;
-            top: 190px;
+            top: 308px;
             left: 0;
             bottom: 0;
             z-index: 998;
@@ -410,6 +472,31 @@
             #data-container {
                 gap: 6px;
                 min-width: max-content;
+            }
+
+            #data-container > div {
+                border-radius: 7px !important;
+                flex: 0 0 118px !important;
+                height: 34px !important;
+                min-width: 118px !important;
+                padding: 3px 8px !important;
+            }
+
+            #data-container > div > div:first-child {
+                font-size: 11px !important;
+                margin-bottom: 1px !important;
+            }
+
+            #data-container > div > div:nth-child(2) span {
+                gap: 0;
+            }
+
+            .index-price {
+                font-size: 10px;
+            }
+
+            .index-change {
+                font-size: 9px;
             }
 
             .ticker-wrap {
@@ -569,6 +656,31 @@
     <div class="main-content">
         <iframe name="cFrame" src="https://guba.eastmoney.com/rank/?market=sh"></iframe>
     </div>
+
+    <script>
+        (() => {
+            const container = document.getElementById("data-container");
+            const formatMarketCards = () => {
+                container.querySelectorAll("span").forEach((span) => {
+                    if (span.dataset.formattedIndex === "1") {
+                        return;
+                    }
+                    const match = span.textContent.trim().match(/^(.+?)\s*\|\s*(.+)$/);
+                    if (!match) {
+                        return;
+                    }
+                    span.dataset.formattedIndex = "1";
+                    span.innerHTML = `<span class="index-price">${match[1]}</span><span class="index-change">${match[2]}</span>`;
+                });
+            };
+
+            formatMarketCards();
+            new MutationObserver(formatMarketCards).observe(container, {
+                childList: true,
+                subtree: true
+            });
+        })();
+    </script>
 
     <script>
         (() => {
