@@ -286,6 +286,24 @@
             min-width: 225px !important;
             padding: 16px 18px !important;
             text-align: center !important;
+            transition: background 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease;
+        }
+
+        #data-container > div.market-card-up {
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.94), rgba(255, 255, 255, 0) 34%),
+                linear-gradient(135deg, #ffe1e6 0%, #fff0ef 48%, #fffafa 100%) !important;
+            border-color: rgba(255, 213, 219, 0.95) !important;
+            box-shadow:
+                0 10px 22px rgba(210, 56, 72, 0.1),
+                inset 0 1px 0 rgba(255, 255, 255, 0.82) !important;
+        }
+
+        #data-container > div.market-card-flat {
+            background:
+                radial-gradient(circle at 18% 12%, rgba(255, 255, 255, 0.92), rgba(255, 255, 255, 0) 32%),
+                linear-gradient(135deg, #edf3ff 0%, #f5f8ff 48%, #ffffff 100%) !important;
+            border-color: rgba(220, 229, 255, 0.95) !important;
         }
 
         #data-container > div > div:first-child {
@@ -301,6 +319,16 @@
             color: #00a51b !important;
             font-size: 0 !important;
             line-height: 1.16;
+        }
+
+        #data-container > div.market-card-up > div:first-child,
+        #data-container > div.market-card-up > div:nth-child(2) {
+            color: #d71920 !important;
+        }
+
+        #data-container > div.market-card-flat > div:first-child,
+        #data-container > div.market-card-flat > div:nth-child(2) {
+            color: #4b6b9c !important;
         }
 
         #data-container > div > div:nth-child(2) span {
@@ -660,15 +688,31 @@
     <script>
         (() => {
             const container = document.getElementById("data-container");
+            const getMarketState = (span, changeText) => {
+                if (span.classList.contains("positive") || changeText.includes("+")) {
+                    return "up";
+                }
+                if (span.classList.contains("negative") || changeText.includes("-")) {
+                    return "down";
+                }
+                return "flat";
+            };
             const formatMarketCards = () => {
                 container.querySelectorAll("span").forEach((span) => {
-                    if (span.dataset.formattedIndex === "1") {
-                        return;
-                    }
-                    const match = span.textContent.trim().match(/^(.+?)\s*\|\s*(.+)$/);
+                    const text = span.dataset.rawIndexText || span.textContent.trim();
+                    const match = text.match(/^(.+?)\s*\|\s*(.+)$/);
                     if (!match) {
                         return;
                     }
+                    const card = span.closest("#data-container > div");
+                    const state = getMarketState(span, match[2]);
+                    card.classList.toggle("market-card-up", state === "up");
+                    card.classList.toggle("market-card-down", state === "down");
+                    card.classList.toggle("market-card-flat", state === "flat");
+                    if (span.dataset.formattedIndex === "1") {
+                        return;
+                    }
+                    span.dataset.rawIndexText = text;
                     span.dataset.formattedIndex = "1";
                     span.innerHTML = `<span class="index-price">${match[1]}</span><span class="index-change">${match[2]}</span>`;
                 });
