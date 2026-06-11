@@ -697,6 +697,27 @@
                 }
                 return "flat";
             };
+            const sortMarketCards = () => {
+                const priority = {
+                    up: 0,
+                    flat: 1,
+                    down: 2
+                };
+                const currentCards = Array.from(container.children);
+                const sortedCards = currentCards
+                    .map((card, index) => ({
+                        card,
+                        index,
+                        rank: priority[card.dataset.marketState] ?? 3
+                    }))
+                    .sort((a, b) => a.rank - b.rank || a.index - b.index)
+                    .map(({ card }) => card);
+                const unchanged = sortedCards.every((card, index) => card === currentCards[index]);
+                if (unchanged) {
+                    return;
+                }
+                sortedCards.forEach((card) => container.appendChild(card));
+            };
             const formatMarketCards = () => {
                 container.querySelectorAll("span").forEach((span) => {
                     const text = span.dataset.rawIndexText || span.textContent.trim();
@@ -706,6 +727,7 @@
                     }
                     const card = span.closest("#data-container > div");
                     const state = getMarketState(span, match[2]);
+                    card.dataset.marketState = state;
                     card.classList.toggle("market-card-up", state === "up");
                     card.classList.toggle("market-card-down", state === "down");
                     card.classList.toggle("market-card-flat", state === "flat");
@@ -716,6 +738,7 @@
                     span.dataset.formattedIndex = "1";
                     span.innerHTML = `<span class="index-price">${match[1]}</span><span class="index-change">${match[2]}</span>`;
                 });
+                sortMarketCards();
             };
 
             formatMarketCards();
